@@ -28,7 +28,7 @@ remotepath="/rcsdata/ecrc/$USER/$hostname"
 while [ $attempts -lt $MAXATTEMPTS ] ; do 
 	attempts=$((attempts + 1));
 	# if max attempts reached, try to use 'real' path in noor
-	[ $attempts -eq $((MAXATTEMPTS-1)) ] && remotepath="/grs_data/labs/ecrc/$USER/$hostname"
+	[ $attempts -eq $((MAXATTEMPTS)) ] && remotepath="/grs_data/labs/ecrc/$USER/$hostname"
 
 	# copy data, deleting files that no longer exists locally.
 	# Files are stored in the path /rcsdata/ecrc/$USER/$hostname at NOOR
