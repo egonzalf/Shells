@@ -10,9 +10,6 @@
 ##    crontab -e
 ##############################################################################
 
-
-
-
 # get the local machine name
 hostname=$(hostname -s)
 
@@ -28,7 +25,6 @@ MAXATTEMPTS=3
 
 remotepath="/rcsdata/ecrc/$USER/$hostname"
 
-
 while [ $attempts -lt $MAXATTEMPTS ] ; do 
 	attempts=$((attempts + 1));
 	# if max attempts reached, try to use 'real' path in noor
@@ -38,8 +34,7 @@ while [ $attempts -lt $MAXATTEMPTS ] ; do
 	# Files are stored in the path /rcsdata/ecrc/$USER/$hostname at NOOR
 	# Files are kept for 60 days in IT's own backup system, just in case.
 	rsync -e 'ssh -o "NumberOfPasswordPrompts 0"' -a --delete $HOME/noor-backup/ noor1.kaust.edu.sa:$remotepath && break;
-
-
 done
 
 exit $((attempts-1))
+
