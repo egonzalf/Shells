@@ -1,4 +1,4 @@
-#!/bin/bash -x
+#!/bin/bash
 
 ##############################################################################
 ## NOOR backup for every user under /home/
@@ -17,6 +17,7 @@ cat > $excludelist << EOF
 #.git/
 *.so
 *.a
+noor-backup/
 EOF
 
 
@@ -28,7 +29,11 @@ for userdir in `find /home/ -maxdepth 1 -type d `; do
 
 	remotepath="/grs_data/labs/ecrc/gonzalea/ALLECRC/$hostname/$username"
 
-	nice -n +19 rsync -e 'ssh -i /home/gonzalea/.ssh/id_rsa -o "NumberOfPasswordPrompts 0"' -az --exclude-from=$excludelist --delete --max-size=5m $userdir/ gonzalea@noor1.kaust.edu.sa:$remotepath || continue;
+	#TODO: backup only recent files
+	#find /path/to/dir -mtime -366 > /tmp/rsyncfiles # files younger than 1 year
+	#rsync -Ravh --files-from=/tmp/rsyncfiles / root@www.someserver.com:/root/backup
+
+	nice -n +19 rsync -e 'ssh -i /home/gonzalea/.ssh/id_rsa -o "NumberOfPasswordPrompts 0"' -az -vv --exclude-from=$excludelist --delete --max-size=5m $userdir/ gonzalea@noor1.kaust.edu.sa:$remotepath || continue;
 
 	sleep 5
 done
