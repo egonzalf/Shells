@@ -31,6 +31,7 @@ do
 		file=/tmp/machines.lastlog.$h.txt
 		line=`grep -w $name $file`
 		if [ "a" != "a$line" ]; then
+			lastconn=$(echo $line | grep -v Never | awk '{print $(NF-3)" "$(NF-4)" "$NF }')
 			lastdate=${lastconn:-"01 Jan 1970"}; # if never connected, defaults to 01-01-1970
 			echo "INSERT INTO users (username,uid) VALUES('$name',$uid) ON DUPLICATE KEY UPDATE uid = IF( uid < VALUES(uid), VALUES(uid), uid );" 
 			echo "INSERT INTO active_users (last,server,user) VALUES (STR_TO_DATE('$lastdate','%d %M %Y'), '$h', '$name') ON DUPLICATE KEY UPDATE last = STR_TO_DATE('$lastdate','%d %M %Y');" 
