@@ -7,6 +7,8 @@ tmp=/tmp/$$.tmp
 
 for h in $machines;
 do
+	ip=$(host $h | cut -f 4 -d " " )
+	echo "INSERT into servers (name,ip) VALUES ('$h','$ip') ON DUPLICATE KEY UPDATE ip = '$ip';"
 	file=/tmp/machines.lastlog.$h.txt
 	ssh $h 'lastlog --user 1000-' > $file
 	#ssh $h "lastlog --user 1000- --time $activedays" > $file.active
