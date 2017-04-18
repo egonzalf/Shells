@@ -14,11 +14,16 @@ hostname=$(hostname -s)
 excludelist=/tmp/.noor-exclude.list
 cat > $excludelist << EOF
 *.o
+*.cu_o
 #.svn/
 #.git/
-*.so
-*.a
-noor-backup/
+#*.so
+#*.a
+*.la
+*.pyo
+*.pyc
+# Asuming user is doing backup on his/her own.
+/noor-backup/
 EOF
 
 
