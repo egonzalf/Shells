@@ -26,6 +26,24 @@ cat > $excludelist << EOF
 /noor-backup/
 EOF
 
+POSSIBLE_HOSTS="noor1 noor2"
+DSTHOST='void'
+for h in $POSSIBLE_HOSTS ; do
+	if ping -q -c 3 $h.kaust.edu.sa; then 
+		DSTHOST="$h.kaust.edu.sa"
+		break
+	fi 
+done
+[ "$DSTHOST" == "void" ] && echo 'no dsthost' && exit 1;
+
+case $DSTHOST in
+	noor2*)
+		remotepath="/rcsdata/ecrc/gonzalea/ALLECRC/$hostname"
+		;;
+	*)
+		remotepath="/grs_data/labs/ecrc/gonzalea/ALLECRC/$hostname"
+		;;
+esac
 
 for userdir in `find /home/ -maxdepth 1 -type d `; do
 	# get username and check uid
@@ -33,13 +51,12 @@ for userdir in `find /home/ -maxdepth 1 -type d `; do
 	id=$(id -u $username 2>/dev/null )
 	[ -n "$id" ] && [ $id -gt 100000 ] || continue;
 
-	remotepath="/grs_data/labs/ecrc/gonzalea/ALLECRC/$hostname/$username"
-
 	#TODO: backup only recent files
 	#find /path/to/dir -mtime -366 > /tmp/rsyncfiles # files younger than 1 year
 	#rsync -Ravh --files-from=/tmp/rsyncfiles / root@www.someserver.com:/root/backup
 
-	nice -n +19 rsync -e 'ssh -i /home/gonzalea/.ssh/id_rsa -o "NumberOfPasswordPrompts 0"' -az -vv --exclude-from=$excludelist --delete --max-size=5m $userdir/ gonzalea@noor1.kaust.edu.sa:$remotepath || continue;
+	# use delete-delay because is more efficient than delete-after
+	nice -n +19 rsync -e 'ssh -i /home/gonzalea/.ssh/id_rsa -o "NumberOfPasswordPrompts 0"' -az -vv --exclude-from=$excludelist --delete-delay --delete-excluded --max-size=$MAXSIZE $userdir/ gonzalea@$DSTHOST:$remotepath/$username || continue;
 
 	sleep 5
 done
