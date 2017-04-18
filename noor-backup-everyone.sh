@@ -2,10 +2,11 @@
 
 ##############################################################################
 ## NOOR backup for every user under /home/
-## will exclude listed files and files bigger than 5mb
+## will exclude listed files and files bigger than 50mb
 ## This is meant to be run as root
 ##############################################################################
 
+MAXSIZE="50m"
 # get the local machine name
 hostname=$(hostname -s)
 
