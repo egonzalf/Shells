@@ -24,7 +24,7 @@ id=$(id -u $USER)
 [ $id -gt 100000 ] || exit 102;
 
 attempts=0
-MAXATTEMPTS=3
+MAXATTEMPTS=1
 
 REMOTEPATH="/rcsdata/ecrc/$USER/$hostname"
 

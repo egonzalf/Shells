@@ -10,8 +10,8 @@ for username in `cut -d: -f1 /etc/passwd`; do
 	id=$(id -u $username 2>/dev/null )
 	[ -n "$id" ] && [ $id -gt 100000 ] || continue;
 
+	echo "-> $username"
 	sudo -u $username -H /opt/noor-backup-folder.sh
-	#echo "-> $username"
 	sleep 1.3
 done
 
