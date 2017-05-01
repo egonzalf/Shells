@@ -10,6 +10,7 @@ if [ -z $2 ] ; then depth=0; else depth=$2; fi
 
 rootdir=$1
 cd $rootdir
+svn update --quiet
 
 fields=1; for i in $(seq 2 $((depth+1))); do fields="$fields,$i"; done
 
