@@ -10,11 +10,16 @@
 ##    crontab -e
 ##############################################################################
 
+LOCALDIR=$HOME/noor-backup
+LOCALDIR=$HOME
+#REMOTEHOST=noor2.kaust.edu.sa
+REMOTEHOST=dm02.kaust.edu.sa
+
 # get the local machine name
 hostname=$(hostname -s)
 
 # if directory doesn't exist, exit
-[ -d $HOME/noor-backup/ ] || exit 101;
+[ -d $LOCALDIR ] || exit 101;
 
 # if userid is less than 100000, exit
 id=$(id -u $USER)
@@ -23,17 +28,17 @@ id=$(id -u $USER)
 attempts=0
 MAXATTEMPTS=3
 
-remotepath="/rcsdata/ecrc/$USER/$hostname"
+REMOTEPATH="/rcsdata/ecrc/$USER/$hostname"
 
 while [ $attempts -lt $MAXATTEMPTS ] ; do 
 	attempts=$((attempts + 1));
 	# if max attempts reached, try to use 'real' path in noor
-	[ $attempts -eq $((MAXATTEMPTS)) ] && remotepath="/grs_data/labs/ecrc/$USER/$hostname"
+	[ $attempts -eq $((MAXATTEMPTS)) ] && REMOTEPATH="/grs_data/labs/ecrc/$USER/$hostname"
 
 	# copy data, deleting files that no longer exists locally.
 	# Files are stored in the path /rcsdata/ecrc/$USER/$hostname at NOOR
 	# Files are kept for 60 days in IT's own backup system, just in case.
-	rsync -e 'ssh -o "NumberOfPasswordPrompts 0"' -a --delete $HOME/noor-backup/ noor1.kaust.edu.sa:$remotepath && break;
+	rsync -e 'ssh -o "NumberOfPasswordPrompts 0"' -a --delete $LOCALDIR/ $REMOTEHOST:$REMOTEPATH && break;
 done
 
 exit $((attempts-1))
