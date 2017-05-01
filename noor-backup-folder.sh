@@ -1,14 +1,12 @@
 #!/bin/bash
 
-##############################################################################
+##################################################################################
 ## Requirements for the NOOR backup
 ## 1) Request a Noor account and ask to be part of rc-ecrc group
-## 2) Set up a passwordless ssh connection to noor1 (using ssh keys)
-## 3) create noor-backup directory:
-##    mkdir -p $HOME/noor-backup
-## 4) Uncomment this script in your crontab
-##    crontab -e
-##############################################################################
+## 2) Set up a passwordless ssh connection to dm02.kaust.edu.sa (using ssh keys)
+## 3) Check your passwordless connection and
+##    see if the directory /rcsdata/ecrc/<your-username> exists
+##################################################################################
 
 LOCALDIR=$HOME/noor-backup
 LOCALDIR=$HOME
