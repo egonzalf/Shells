@@ -26,22 +26,22 @@ cat > $excludelist << EOF
 /noor-backup/
 EOF
 
-POSSIBLE_HOSTS="noor1 noor2"
+POSSIBLE_HOSTS="dm02 noor1 noor2"
 DSTHOST='void'
 for h in $POSSIBLE_HOSTS ; do
-	if ping -q -c 3 $h.kaust.edu.sa; then 
+	if ping -q -c 3 $h.kaust.edu.sa; then
 		DSTHOST="$h.kaust.edu.sa"
 		break
-	fi 
+	fi
 done
 [ "$DSTHOST" == "void" ] && echo 'no dsthost' && exit 1;
 
 case $DSTHOST in
-	noor2*)
-		remotepath="/rcsdata/ecrc/gonzalea/ALLECRC/$hostname"
+	noor1*)
+		remotepath="/grs_data/labs/ecrc/gonzalea/ALLECRC/$hostname"
 		;;
 	*)
-		remotepath="/grs_data/labs/ecrc/gonzalea/ALLECRC/$hostname"
+		remotepath="/rcsdata/ecrc/gonzalea/ALLECRC/$hostname"
 		;;
 esac
 
@@ -60,4 +60,3 @@ for userdir in `find /home/ -maxdepth 1 -type d `; do
 
 	sleep 5
 done
-
