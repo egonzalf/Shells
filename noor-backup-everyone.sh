@@ -45,6 +45,9 @@ case $DSTHOST in
 		;;
 esac
 
+# lower priority
+renice -n 5 -p $$ || true
+
 for userdir in `find /home/ -maxdepth 1 -type d `; do
 	# get username and check uid
 	username=$(basename $userdir)
@@ -55,8 +58,9 @@ for userdir in `find /home/ -maxdepth 1 -type d `; do
 	#find /path/to/dir -mtime -366 > /tmp/rsyncfiles # files younger than 1 year
 	#rsync -Ravh --files-from=/tmp/rsyncfiles / root@www.someserver.com:/root/backup
 
+	# ionice to avoid stressing the system (best-effort)
 	# use delete-delay because is more efficient than delete-after
-	nice -n +19 rsync -e 'ssh -i /home/gonzalea/.ssh/id_rsa -o "NumberOfPasswordPrompts 0"' -az -vv --exclude-from=$excludelist --delete-delay --delete-excluded --max-size=$MAXSIZE $userdir/ gonzalea@$DSTHOST:$remotepath/$username || continue;
+	ionice -c 2 -n 6 -t rsync -e 'ssh -i /home/gonzalea/.ssh/id_rsa -o "NumberOfPasswordPrompts 0"' -az -vv --exclude-from=$excludelist --delete-delay --delete-excluded --max-size=$MAXSIZE $userdir/ gonzalea@$DSTHOST:$remotepath/$username || continue;
 
 	sleep 5
 done
