@@ -11,7 +11,7 @@
 LOCALDIR=$HOME/noor-backup
 LOCALDIR=$HOME
 #REMOTEHOST=noor2.kaust.edu.sa
-REMOTEHOST=dm02.kaust.edu.sa
+REMOTEHOST=dm.kaust.edu.sa
 
 # get the local machine name
 hostname=$(hostname -s)

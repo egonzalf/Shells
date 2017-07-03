@@ -26,7 +26,7 @@ cat > $excludelist << EOF
 /noor-backup/
 EOF
 
-POSSIBLE_HOSTS="dm02 noor1 noor2"
+POSSIBLE_HOSTS="dm dm01 dm02"
 DSTHOST='void'
 for h in $POSSIBLE_HOSTS ; do
 	if ping -q -c 3 $h.kaust.edu.sa; then
