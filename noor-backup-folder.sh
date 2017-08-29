@@ -2,10 +2,10 @@
 
 ##################################################################################
 ## Requirements for the NOOR backup
-## 1) Request a Noor account and ask to be part of rc-ecrc group
+## 1) Request a Noor account and ask to be part of rc-ecrc group (IT HelpDesk)
 ## 2) Set up a passwordless ssh connection to dm02.kaust.edu.sa (using ssh keys)
-## 3) Check your passwordless connection and
-##    see if the directory /rcsdata/ecrc/<your-username> exists
+## 3) Check your passwordless connection and see if the 
+##    directory /rcsdata/ecrc/<your-username> exists in dm.kaust.edu.sa
 ##################################################################################
 
 LOCALDIR=$HOME/noor-backup
