@@ -34,7 +34,6 @@ sub milog {
 }
 
 
-
 milog "-- $HOSTNAME -- $INTERVAL \n";
 
 my $content = '<xml></xml>';
@@ -76,26 +75,24 @@ while (sleep $INTERVAL > 0) {
 
 	$epoch = time;
 
-	# Obtiene el XML desde la URL
+	# Get XML from URL
 	if ( shouldQuery() eq "ok" ) {
 		$content = `nvidia-smi -q -x` || "<xml></xml>";
 	}
 	$skipcounter = 0 if ($skipcounter > $interval_skip);
 	#$content = `cat /tmp/nvidia.xml`;
 
-	$content =~ s/^\s+|\s+$//g ; # elimina espacios
+	$content =~ s/^\s+|\s+$//g ; # remove white spaces
 
 	# Query time
 	$deltat = time - $epoch;
 
-	# transforma a variable
+	# trasform into a variable
 	my $aux = XMLin($content, KeyAttr => { gpu => 'id' });
-	#my $bla = $aux->{gpu}->{fan_speed};
 	milog Dumper($aux);
-	#milog "$bla \n";
 
 	my $gpu_id='0';
-	# recorre el XML
+	# Parse XML
 	if ( $aux->{attached_gpus} > 1 ) {
 		foreach my $key ( keys %{$aux->{gpu}} ) {
 			milog "$key \n";
@@ -111,12 +108,6 @@ while (sleep $INTERVAL > 0) {
 			print "PUTVAL \"$HOSTNAME/$gpu_id/memory-used\" interval=$INTERVAL N:".substr($memory->{'used'},0,-3)."\n";
 			print "PUTVAL \"$HOSTNAME/$gpu_id/memory-free\" interval=$INTERVAL N:".substr($memory->{'free'},0,-3)."\n";
 			print "PUTVAL \"$HOSTNAME/$gpu_id/gpu_utilization\" interval=$INTERVAL N:$gpuutil\n";
-
-# 			print "PUTVAL \"$HOSTNAME/$gpu_id/utilization-gpu\" interval=$INTERVAL N:".substr($utilization->{'gpu_util'},0,-2)."\n" if( $utilization->{'gpu_util'} );
-# 			print "PUTVAL \"$HOSTNAME/$gpu_id/utilization-memory\" interval=$INTERVAL N:".substr($utilization->{'memory_util'},0,-2)."\n" if( $utilization->{'memory_util'} );
-# 			print "PUTVAL \"$HOSTNAME/$gpu_id/utilization-encoder\" interval=$INTERVAL N:".substr($utilization->{'encoder_util'},0,-2)."\n" if( $utilization->{'encoder_util'} );
-# 			print "PUTVAL \"$HOSTNAME/$gpu_id/utilization-decoder\" interval=$INTERVAL N:".substr($utilization->{'decoder_util'},0,-2)."\n" if( $utilization->{'decoder_util'} );
-
 
 			if ( $aux->{gpu}->{$key}->{'persistence_mode'} eq "Enabled" ) {
 				$interval_skip=0;
@@ -141,11 +132,6 @@ while (sleep $INTERVAL > 0) {
 		print "PUTVAL \"$HOSTNAME/$gpu_id/gpu_utilization\" interval=$INTERVAL N:$gpuutil\n";
 
 
-# 		print "PUTVAL \"$HOSTNAME/$gpu_id/gpu_utilization\" interval=$INTERVAL N:".substr($utilization->{'gpu_util'},0,-2)."\n" if( $utilization->{'gpu_util'} );
-# 		print "PUTVAL \"$HOSTNAME/$gpu_id/utilization-memory\" interval=$INTERVAL N:".substr($utilization->{'memory_util'},0,-2)."\n" if( $utilization->{'memory_util'} );
-# 		print "PUTVAL \"$HOSTNAME/$gpu_id/utilization-encoder\" interval=$INTERVAL N:".substr($utilization->{'encoder_util'},0,-2)."\n" if( $utilization->{'encoder_util'} );
-# 		print "PUTVAL \"$HOSTNAME/$gpu_id/utilization-decoder\" interval=$INTERVAL N:".substr($utilization->{'decoder_util'},0,-2)."\n" if( $utilization->{'decoder_util'} );
-
 		if ( $aux->{gpu}->{'persistence_mode'} eq "Enabled" ) {
 			$interval_skip=0;
 		}
@@ -154,7 +140,7 @@ while (sleep $INTERVAL > 0) {
 		}
 
 	}
-	# sale si se paso el parametro "--once"
+	# if parameter "--once", exits
 	exit if ( $SALIR );
 }
 
