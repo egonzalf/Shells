@@ -3,7 +3,7 @@
 ##################################################################################
 ## Requirements for the NOOR backup
 ## 1) Request a Noor account and ask to be part of rc-ecrc group (IT HelpDesk)
-## 2) Set up a passwordless ssh connection to dm02.kaust.edu.sa (using ssh keys)
+## 2) Set up a passwordless ssh connection to dm.kaust.edu.sa (using ssh keys)
 ## 3) Check your passwordless connection and see if the 
 ##    directory /rcsdata/ecrc/<your-username> exists in dm.kaust.edu.sa
 ##################################################################################
@@ -36,7 +36,7 @@ while [ $attempts -lt $MAXATTEMPTS ] ; do
 	# copy data, deleting files that no longer exists locally.
 	# Files are stored in the path /rcsdata/ecrc/$USER/$hostname at NOOR
 	# Files are kept for 60 days in IT's own backup system, just in case.
-	rsync -e 'ssh -o "NumberOfPasswordPrompts 0"' -a --delete $LOCALDIR/ $REMOTEHOST:$REMOTEPATH && break;
+	ionice -c 2 -n 6 -t rsync -e 'ssh -o "NumberOfPasswordPrompts 0"' -a --delete $LOCALDIR/ $REMOTEHOST:$REMOTEPATH && break;
 done
 
 exit $((attempts-1))
