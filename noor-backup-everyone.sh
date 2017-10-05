@@ -6,7 +6,7 @@
 ## This is meant to be run as root
 ##############################################################################
 
-MAXSIZE="50m"
+MAXSIZE="500m"
 # get the local machine name
 hostname=$(hostname -s)
 
@@ -19,9 +19,9 @@ cat > $excludelist << EOF
 #.git/
 #*.so
 #*.a
-*.la
+#*.la
 *.pyo
-*.pyc
+#*.pyc
 # Asuming user is doing backup on his/her own.
 /noor-backup/
 EOF
