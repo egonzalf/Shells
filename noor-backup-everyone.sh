@@ -60,7 +60,7 @@ for userdir in `find /home/ -maxdepth 1 -type d `; do
 
 	# Check if user can connect passworless.
 	# This indicates that a personal back must be working.No need for this
-	if sudo -u $username ssh $DSTHOST ls $remotepath/$username 2>/dev/null
+	if sudo -u $username ssh -o "NumberOfPasswordPrompts 0" $DSTHOST ls /rcsdata/ecrc/$username/$hostname 1>&2 2>/dev/null
 	then
 		echo "User $username must be doing backup."
 		continue
