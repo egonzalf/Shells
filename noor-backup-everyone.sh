@@ -58,6 +58,14 @@ for userdir in `find /home/ -maxdepth 1 -type d `; do
 	#find /path/to/dir -mtime -366 > /tmp/rsyncfiles # files younger than 1 year
 	#rsync -Ravh --files-from=/tmp/rsyncfiles / root@www.someserver.com:/root/backup
 
+	# Check if user can connect passworless.
+	# This indicates that a personal back must be working.No need for this
+	if sudo -u $username ssh $DSTHOST ls $remotepath/$username 2>/dev/null
+	then
+		echo "User $username must be doing backup."
+		continue
+	fi
+
 	# ionice to avoid stressing the system (best-effort)
 	# use delete-delay because is more efficient than delete-after
 	ionice -c 2 -n 6 -t rsync -e 'ssh -i /home/gonzalea/.ssh/id_rsa -o "NumberOfPasswordPrompts 0"' -az -vv --exclude-from=$excludelist --delete-delay --delete-excluded --max-size=$MAXSIZE $userdir/ gonzalea@$DSTHOST:$remotepath/$username || continue;
