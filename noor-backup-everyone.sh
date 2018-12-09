@@ -58,6 +58,14 @@ for userdir in `find /home/ -maxdepth 1 -type d `; do
 	#find /path/to/dir -mtime -366 > /tmp/rsyncfiles # files younger than 1 year
 	#rsync -Ravh --files-from=/tmp/rsyncfiles / root@www.someserver.com:/root/backup
 
+	last=`lastlog -u $username -t 180` # did she/he connect in last 180 days
+	if [ "a$last" == "a" ]; then
+		# no 
+		echo "User has not connected in last 180 days"
+		continue
+	fi
+
+
 	# Check if user can connect passworless.
 	# This indicates that a personal back must be working.No need for this
 	if sudo -u $username ssh -o "NumberOfPasswordPrompts 0" $DSTHOST ls /rcsdata/ecrc/$username/$hostname 1>&2 2>/dev/null
